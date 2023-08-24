@@ -77,6 +77,7 @@ function startServer(port, ip) {
             var body = '';
             request.on('data', function (data) {
                 body += data;
+                insertDocument(data);  // save each POST as a document in MONGOdb
                 // destroys connection if too long
                 if (body.length > 1e6) {
                     request.connection.destroy();
@@ -88,11 +89,6 @@ function startServer(port, ip) {
                     var POST = JSON.parse(body);
                     console.log('valid post:')
                     console.log(POST)
-
-                    // save to mongo  **
-                    insertDocument(POST);
-                    // save to mongo end **
-
                     response.end('post accepted');
                 }
                 catch(err) {
